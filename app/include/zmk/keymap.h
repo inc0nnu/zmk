@@ -33,42 +33,21 @@ zmk_keymap_layer_id_t zmk_keymap_layer_index_to_id(zmk_keymap_layer_index_t laye
 
 zmk_keymap_layer_id_t zmk_keymap_layer_default(void);
 zmk_keymap_layers_state_t zmk_keymap_layer_state(void);
-bool zmk_keymap_layer_active(zmk_keymap_layer_id_t layer);
-zmk_keymap_layer_index_t zmk_keymap_highest_layer_active(void);
-int zmk_keymap_layer_activate(zmk_keymap_layer_id_t layer);
-int zmk_keymap_layer_deactivate(zmk_keymap_layer_id_t layer);
-int zmk_keymap_layer_toggle(zmk_keymap_layer_id_t layer);
-int zmk_keymap_layer_to(zmk_keymap_layer_id_t layer);
-const char *zmk_keymap_layer_name(zmk_keymap_layer_id_t layer);
-
-const struct zmk_behavior_binding *zmk_keymap_get_layer_binding_at_idx(zmk_keymap_layer_id_t layer,
-                                                                       uint8_t binding_idx);
-int zmk_keymap_set_layer_binding_at_idx(zmk_keymap_layer_id_t layer, uint8_t binding_idx,
-                                        const struct zmk_behavior_binding binding);
-
-#if IS_ENABLED(CONFIG_ZMK_KEYMAP_LAYER_REORDERING)
-
-int zmk_keymap_add_layer(void);
-int zmk_keymap_remove_layer(zmk_keymap_layer_index_t index);
-int zmk_keymap_restore_layer(zmk_keymap_layer_id_t id, zmk_keymap_layer_index_t at_index);
-
-int zmk_keymap_move_layer(zmk_keymap_layer_index_t start_idx, zmk_keymap_layer_index_t dest_idx);
-
-int zmk_keymap_set_layer_name(zmk_keymap_layer_id_t id, const char *name, size_t size);
-
+bool zmk_keymap_layer_active(uint8_t layer);
+#if IS_ENABLED(CONFIG_ZMK_TRACK_MOMENTARY_LAYERS)
+bool zmk_keymap_layer_momentary(uint8_t layer);
+bool zmk_keymap_layers_any_momentary(zmk_keymap_layers_state_t layers_mask);
 #endif
-
-/**
- * @brief Check if there are any unsaved keymap changes.
- *
- * @retval 0 if there are no changes.
- * @retval 1 if there are changes.
- */
-int zmk_keymap_check_unsaved_changes(void);
-
-int zmk_keymap_save_changes(void);
-int zmk_keymap_discard_changes(void);
-int zmk_keymap_reset_settings(void);
+uint8_t zmk_keymap_highest_layer_active(void);
+#if IS_ENABLED(CONFIG_ZMK_TRACK_MOMENTARY_LAYERS)
+int zmk_keymap_layer_activate(uint8_t layer, bool momentary);
+#else
+int zmk_keymap_layer_activate(uint8_t layer);
+#endif
+int zmk_keymap_layer_deactivate(uint8_t layer);
+int zmk_keymap_layer_toggle(uint8_t layer);
+int zmk_keymap_layer_to(uint8_t layer);
+const char *zmk_keymap_layer_name(uint8_t layer);
 
 int zmk_keymap_position_state_changed(uint8_t source, uint32_t position, bool pressed,
                                       int64_t timestamp);
